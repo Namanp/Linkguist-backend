@@ -44,8 +44,8 @@ app.post("/", function(req,res) {
   });
   language_translation.translate({
     text: original_text,
-    source: 'es',
-    target: 'en'
+    source: 'en',
+    target: 'es'
   }, function(err, translation) {
     if (err) {
       console.log(err);
