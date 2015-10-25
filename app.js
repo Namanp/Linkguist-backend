@@ -36,13 +36,13 @@ app.listen(appEnv.port, '0.0.0.0', function() {
   console.log("server starting on " + appEnv.url);
 });
 app.post("/", function(req,res) {
-	var original_text = req.body.original_text
+  var original_text = req.body.original_text
 	var language_translation = watson.language_translation({
-  username: '1b6a15c0-8e59-431a-8584-a4bc8335b58f',
-  password: 'qkjAS8S3yBcl',
-  version: 'v2'
-});
-language_translation.translate({
+    username: '1b6a15c0-8e59-431a-8584-a4bc8335b58f',
+    password: 'qkjAS8S3yBcl',
+    version: 'v2'
+  });
+  language_translation.translate({
     text: original_text,
     source: 'en',
     target: 'es'
@@ -51,9 +51,11 @@ language_translation.translate({
       console.log(err);
      }
     else {
-      console.log(translation.translations[0].translation);
+      var trans_message = translation.translations[0].translation
+      console.log(trans_message);
       console.log("Success")
+      res.send({tmessage: trans_message})
      }
-});
+  });
 	console.log(original_text)
 })
