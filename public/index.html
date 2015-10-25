@@ -2,11 +2,13 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-
+        <title>Linkguist</title>
         <!-- Include Moxtra JavaScript Library -->
         <script type="text/javascript" src="https://www.moxtra.com/api/js/moxtra-latest.js" id="moxtrajs"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/stylesheets/index.css">
+        <link rel="icon" type="image/png" href="/images/favicon.png">
         <!-- Authenticate/Initialize and get the "Access Token" for the user -->
         <!-- Refer to the doc at https://developer.moxtra.com/docs/docs-oauth/#uniqueid to authenticate user based on UniqueID Method -->
         <!-- For other authentication methods and overview refer to the doc at https://developer.moxtra.com/docs/docs-authentication/ -->
@@ -96,11 +98,11 @@
                 unique_id: "user1",
                 iframe: true,
                 //ID of the HTML tag within which the chat window will show up. Refer https://developer.grouphour.com/moxo/docs-js-sdk/#conversation
-                tagid4iframe: "chat-container",
-                iframewidth: "1000px",
-                iframeheight: "750px",
-                autostart_meet: true,
-                autostart_note: true,
+                tagid4iframe: "chat_container",
+                iframewidth: "500px",
+                iframeheight: "500px",
+                autostart_meet: false,
+                autostart_note: false,
                 extension: { "show_dialogs": { "member_invite": true } },
                 start_chat: function(event) {
                         console.log("Chat started.")
@@ -159,8 +161,23 @@
             
     </head>
     <body onload="get_access_token()">
-        <h3><a id="getToken" href="javascript:start_chat();">Moxtra Chat</a></h3>
-        <div id="chat-container"></div>
+        
+        <div class="jumbotron">
+            <img src="/images/title.png"/>
+            <div class="container">
+            </div>
+        </div>
+           
+        <div class="container" id="stuff">
+            <div id="chat_container"> </div>
 
+        </div>
+        
+        <div id="chat">
+            <h3><a id="getToken" href="javascript:start_chat();">Moxtra Chat</a></h3>
+        </div>
+        <div id="closing">
+            <p style="color=#7abcf2">Brought to you by Eric Hou & Associates</p>
+    </div>
     </body>
 </html>

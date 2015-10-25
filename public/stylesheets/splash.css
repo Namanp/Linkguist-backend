@@ -1,0 +1,46 @@
+body{
+  background-color: #7abcf2;
+}
+.jumbotron {
+  background-image:url('/images/new.png');  
+  background-color: #7abcf2;
+  height: 500px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-left: 15%;
+  padding: 0px;
+
+}
+
+.jumbotron h1 {
+  color: #fff;
+  font-size: 48px;  
+  font-family: 'Shift', sans-serif;
+  font-weight: bold;
+}
+
+.jumbotron p {
+  font-size: 20px;
+  color: #fff;
+}
+.container {
+  background-color:#7abcf2;
+}
+
+#buttonflags img{
+  height: 150px;
+  width: auto;
+
+}
+
+#pick h1{
+  text-align: center;
+  color: white;
+}
+
+.image:hover{
+  padding: 0px;
+  border-style: ridge;
+  border-width: 5px;
+  border-color: #245dbd;
+}
