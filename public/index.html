@@ -27,9 +27,42 @@
             //     return data;
             // }
             var access_token;
-            
-            function translate_text_with_watson(message){
-                
+            var last_message = "";
+            var posturl = "";
+            function send_translated_message(message){
+                console.log(message)
+                last_message = message;
+                $.ajax({
+                    method: "POST",
+                    url: posturl,
+                    dataType: "json",
+                    contentType: "application/json", 
+                    data: JSON.stringify({
+                    text: message
+                    }),
+                    success: function(data, textStatus, jqXHR) {
+                        console.log(textStatus);
+                        },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus);
+                        }
+                        });
+            }
+
+            function translate(message){
+
+                $.ajax({
+                        url: '/',
+                        type: 'POST',
+                        data: { original_text: message},
+                        async: false,
+                    success: function (data, textStatus, jqXHR) {
+                        send_translated_message(data.tmessage)
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                }); 
             }
 
             function get_access_token() { 
@@ -88,7 +121,6 @@
         <!-- Start Chat Function -->
         <script type="text/javascript">
         function start_chat () {
-        var is_translated_message = false;
         console.log("We've Started")            
             var chat_options = {
                 //unique id of the users who will be part of the chat. These users should already exist in Moxtra.
@@ -120,33 +152,17 @@
                     console.log("Note start request");
                 },
                 publish_feed: function(event){
-                    console.log(event.message);
-
-                    if (!is_translated_message){
-                    event.message = event.message.slice(event.message.indexOf(" "))
-                    translated_message = event.message//TRANSLATE HERE
+                    new_message = event.message.slice(event.message.indexOf(" ") + 1)
+                    console.log(new_message);
+                    console.log(last_message)
+                    if (new_message != last_message){
                     posturl = "https://apisandbox.moxtra.com/" + event.binder_id + "/comments?access_token="+access_token;
                     console.log(posturl)
-                    $.ajax({
-                    method: "POST",
-                    url: posturl,
-                    dataType: "json",
-                    contentType: "application/json", 
-                    data: JSON.stringify({
-                    "text": translated_message
-                    }),
-                    success: function(data, textStatus, jqXHR) {
-                        console.log(textStatus);
-                        },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.log(textStatus);
-                        }
-                        });
-
+                    translate(new_message)
                 } else {
                     console.log("Duplicate Message " + event.message)
                 }
-                is_translated_message = !is_translated_message
+                
                 },
                 error: function(event) {
                     console.log("Chat error code: " + event.error_code + " error message: " + event.error_message);
