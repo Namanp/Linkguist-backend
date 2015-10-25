@@ -52,6 +52,7 @@ language_translation.translate({
      }
     else {
       console.log(translation.translations[0].translation);
+      console.log("Success")
      }
 });
 	console.log(original_text)

@@ -26,16 +26,14 @@
             //     }
             //     return data;
             // }
-            function getBinderContents() {
-                $.ajax({
-                    url: "https://apisandbox.moxtra.com/v1/BTEahwWvVdcHDI9NaaqOX8J/conversations",
-                    success: function(data, textStatus, jqXHR) {
-                    alert(data.actor.displayName);
-                    }
-                });
+            var access_token;
+            
+            function translate_text_with_watson(message){
+                
             }
+
             function get_access_token() { 
-                var access_token;
+                
                 var client_id = "lZzzYnnz8No";
                 var client_secret = "tC87sYCKZ1o";
                 var uniqueid = "user3";
@@ -43,6 +41,7 @@
                 //var hash = CryptoJS.HmacSHA256(client_id + "" + uniqueid + "" + timestamp, client_secret);
                 //var signature = rtrim(strtr(CryptoJS.enc.Base64.stringify(hash), '+/', '-_'), '=');
                 var firstname = "Naman";
+
                 $.ajax({
                     method: "POST",
                     url: "https://apisandbox.moxtra.com/oauth/token",
@@ -58,7 +57,7 @@
                     async: false,
                     success: function(data, textStatus, jqXHR) {
                         access_token = data.access_token;
-                        alert(access_token);
+                        console.log(access_token);
                         },
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.log(textStatus);
@@ -89,6 +88,7 @@
         <!-- Start Chat Function -->
         <script type="text/javascript">
         function start_chat () {
+        var is_translated_message = false;
         console.log("We've Started")            
             var chat_options = {
                 //unique id of the users who will be part of the chat. These users should already exist in Moxtra.
@@ -103,7 +103,7 @@
                 autostart_note: true,
                 extension: { "show_dialogs": { "member_invite": true } },
                 start_chat: function(event) {
-                        alert("Chat started.")
+                        console.log("Chat started.")
                     console.log("Chat started binder ID: " + event.binder_id);
                     //Your application server can upload files to draw using the binder_id and access_token
                 },
@@ -119,12 +119,39 @@
                 request_note: function(event) {
                     console.log("Note start request");
                 },
-                                receive_feed: function(event){
-                    alert(event.message);
+                publish_feed: function(event){
+                    console.log(event.message);
+
+                    if (!is_translated_message){
+                    event.message = event.message.slice(event.message.indexOf(" "))
+                    translated_message = event.message//TRANSLATE HERE
+                    posturl = "https://apisandbox.moxtra.com/" + event.binder_id + "/comments?access_token="+access_token;
+                    console.log(posturl)
+                    $.ajax({
+                    method: "POST",
+                    url: posturl,
+                    dataType: "json",
+                    contentType: "application/json", 
+                    data: JSON.stringify({
+                    "text": translated_message
+                    }),
+                    success: function(data, textStatus, jqXHR) {
+                        console.log(textStatus);
+                        },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus);
+                        }
+                        });
+
+                } else {
+                    console.log("Duplicate Message " + event.message)
+                }
+                is_translated_message = !is_translated_message
                 },
                 error: function(event) {
                     console.log("Chat error code: " + event.error_code + " error message: " + event.error_message);
                 }
+
             };            
             Moxtra.chat(chat_options);
         }
@@ -133,7 +160,6 @@
     </head>
     <body onload="get_access_token()">
         <h3><a id="getToken" href="javascript:start_chat();">Moxtra Chat</a></h3>
-        <h3><a href="javascript:getBinderContents();">Get Binder Contents</a></h3>
         <div id="chat-container"></div>
 
     </body>
